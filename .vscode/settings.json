@@ -1,0 +1,32 @@
+{
+    "cSpell.words": [
+        "altera",
+        "Budden",
+        "bugprone",
+        "clangtidy",
+        "cppcoreguidelines",
+        "hicpp",
+        "libc",
+        "llvmlibc",
+        "noreturn",
+        "pioenvs",
+        "suppr",
+        "unflags",
+        "Wattributes",
+        "Wcast",
+        "Wdisabled",
+        "Wdouble",
+        "Werror",
+        "Wextra",
+        "Wfloat",
+        "Wimplicit",
+        "Winline",
+        "Wmissing",
+        "Wnarrowing",
+        "Wpacked",
+        "Wpadded",
+        "Wshadow",
+        "Wsign",
+        "Wtrampolines"
+    ]
+}
