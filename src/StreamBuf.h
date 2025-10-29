@@ -72,12 +72,12 @@ public:
         when writing - return available space
         when reading - return the number of bytes remaining in the buffer
     */
-    size_t bytesRemaining() const { return _end - _ptr; }
+    size_t bytesRemaining() const { return static_cast<size_t>(_end - _ptr); }
     /*! 
         when writing - return the number of bytes written to the buffer
         when reading - return the number of bytes read
     */
-    size_t bytesWritten() const { return _ptr - _begin; }
+    size_t bytesWritten() const { return static_cast<size_t>(_ptr - _begin); }
 
     uint8_t* ptr() { return _ptr; }
     const uint8_t* ptr() const { return _ptr; }
