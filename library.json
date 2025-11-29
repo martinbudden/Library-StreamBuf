@@ -14,5 +14,5 @@
     "version": "0.0.2",
     "frameworks": "*",
     "platforms": "*",
-    "headers": [ "StreamBuf.h" ]
+    "headers": [ "StreamBuf.h", "StreamBufReader.h" ]
 }

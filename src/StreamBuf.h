@@ -81,18 +81,20 @@ public:
 
     uint8_t* ptr() { return _ptr; }
     const uint8_t* ptr() const { return _ptr; }
+    const uint8_t* begin() const { return _begin; }
+    const uint8_t* end() const { return _end; }
     /*! Advance _ptr
         when reading - this skips data
         when writing - this effectively commits the written data
     */
     void advance(size_t size) { _ptr += size; }
     void reset() { _ptr = _begin; }
-     //! modifies StreamBuf so that written data can be read
+     //! modifies internal pointers so that data can be read
     uint8_t* switchToReader() {
-        uint8_t* end = _end;
+        uint8_t* endPrevious = _end;
         _end = _ptr;
         _ptr = _begin;
-        return end;
+        return endPrevious;
     }
     /*! Modifies StreamBuf so that it can be used for writing again.
         Any data in StreamBuf is effectively lost.
