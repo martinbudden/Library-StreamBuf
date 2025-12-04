@@ -91,5 +91,5 @@ public:
 protected:
     mutable const uint8_t* _ptr; // data pointer must be first
     const uint8_t* const _begin;
-    const uint8_t* const _end;
+    const uint8_t* _end;
 };
