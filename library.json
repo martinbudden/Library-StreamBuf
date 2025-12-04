@@ -1,6 +1,6 @@
 {
     "name": "StreamBuf",
-    "description": "Simple serializer/deserializer with no bounds checking",
+    "description": "Simple serializer/deserializer with optional bounds checking",
     "keywords": "StreamBuf deserializer",
     "authors": {
         "name": "Martin Budden",

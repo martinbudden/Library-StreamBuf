@@ -46,25 +46,24 @@ void test_stream_buf_reader()
     TEST_ASSERT_EQUAL(7, sbuf.bytesWritten());
     TEST_ASSERT_EQUAL(sizeof(buf) - 7, sbuf.bytesRemaining());
 
-    StreamBufReader sbufReader(sbuf);
-    sbufReader.switchToReader();
+    const StreamBufReader sbufReader(sbuf.reader());
 
-    TEST_ASSERT_EQUAL(0, sbufReader.bytesWritten());
+    TEST_ASSERT_EQUAL(0, sbufReader.bytesRead());
     TEST_ASSERT_EQUAL(7, sbufReader.bytesRemaining());
 
     const uint8_t v1 = sbufReader.readU8();
     TEST_ASSERT_EQUAL(1, v1);
-    TEST_ASSERT_EQUAL(1, sbufReader.bytesWritten());
+    TEST_ASSERT_EQUAL(1, sbufReader.bytesRead());
     TEST_ASSERT_EQUAL(6, sbufReader.bytesRemaining());
 
     const uint16_t v2 = sbufReader.readU16();
     TEST_ASSERT_EQUAL(2, v2);
-    TEST_ASSERT_EQUAL(3, sbufReader.bytesWritten());
+    TEST_ASSERT_EQUAL(3, sbufReader.bytesRead());
     TEST_ASSERT_EQUAL(4, sbufReader.bytesRemaining());
 
     const uint32_t v3 = sbufReader.readU32();
     TEST_ASSERT_EQUAL(3, v3);
-    TEST_ASSERT_EQUAL(7, sbufReader.bytesWritten());
+    TEST_ASSERT_EQUAL(7, sbufReader.bytesRead());
     TEST_ASSERT_EQUAL(0, sbufReader.bytesRemaining());
 }
 
@@ -86,17 +85,10 @@ void test_stream_buf_reader_strings()
     TEST_ASSERT_EQUAL('o', *(ptr-1));
     TEST_ASSERT_EQUAL('l', *(ptr-2));
     TEST_ASSERT_EQUAL('l', *(ptr-3));
+    TEST_ASSERT_EQUAL('e', *(ptr-4));
+    TEST_ASSERT_EQUAL('H', *(ptr-5));
 
-    sbuf.switchToReader();
-    ptr = sbuf.ptr();
-    TEST_ASSERT_EQUAL('H', ptr[0]);
-    TEST_ASSERT_EQUAL('e', ptr[1]);
-    TEST_ASSERT_EQUAL('l', ptr[2]);
-    TEST_ASSERT_EQUAL('l', ptr[3]);
-    TEST_ASSERT_EQUAL('o', ptr[4]);
-    TEST_ASSERT_EQUAL(0xFF, ptr[5]);
-
-    const StreamBufReader sbufReader(sbuf);
+    const StreamBufReader sbufReader(sbuf.reader());
     ptr = sbufReader.ptr();
     TEST_ASSERT_EQUAL('H', ptr[0]);
     TEST_ASSERT_EQUAL('e', ptr[1]);
@@ -105,11 +97,8 @@ void test_stream_buf_reader_strings()
     TEST_ASSERT_EQUAL('o', ptr[4]);
     TEST_ASSERT_EQUAL(0xFF, ptr[5]);
 
-    std::array<uint8_t, 256> buf2;
-    StreamBuf sbuf2(&buf2[0], sizeof(buf2));
-    StreamBufReader sbufReader2(sbuf2);
-    sbufReader2 = sbuf;
-    ptr = sbufReader2.ptr();
+    sbuf.switchToReader();
+    ptr = sbuf.ptr();
     TEST_ASSERT_EQUAL('H', ptr[0]);
     TEST_ASSERT_EQUAL('e', ptr[1]);
     TEST_ASSERT_EQUAL('l', ptr[2]);
