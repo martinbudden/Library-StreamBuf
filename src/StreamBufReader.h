@@ -24,6 +24,13 @@ public:
 
     //! Advance _ptr, this skips data
     void advance(size_t size) { if (_ptr + size < _end) { _ptr += size; } }
+     //! modifies internal pointers so that data can be read
+    const uint8_t* switchToReader() {
+        const uint8_t* endPrevious = _end;
+        _end = _ptr + 1;
+        _ptr = _begin;
+        return endPrevious;
+    }
 //
 // Read functions
 //
