@@ -46,7 +46,7 @@ void test_stream_buf_reader()
     TEST_ASSERT_EQUAL(7, sbuf.bytesWritten());
     TEST_ASSERT_EQUAL(sizeof(buf) - 7, sbuf.bytesRemaining());
 
-    const StreamBufReader sbufReader(sbuf.reader());
+    StreamBufReader sbufReader(sbuf.reader());
 
     TEST_ASSERT_EQUAL(0, sbufReader.bytesRead());
     TEST_ASSERT_EQUAL(7, sbufReader.bytesRemaining());

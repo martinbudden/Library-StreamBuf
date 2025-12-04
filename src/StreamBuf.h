@@ -16,7 +16,7 @@ public:
 
     void reset() { _ptr = _begin; }
     bool isEmpty() const { return _ptr == _begin; }
-    bool isFull() const { return _ptr + 1 == _end; }
+    bool isFull() const { return _ptr + 1 >= _end; }
     const uint8_t* ptr() const { return _ptr; }
     const uint8_t* begin() const { return _begin; }
     const uint8_t* end() const { return _end; }
@@ -47,60 +47,60 @@ public:
 //
 // Read functions
 //
-    uint8_t readU8() const { return *_ptr++; }
-    uint16_t readU16() const { return readU8() | static_cast<uint16_t>(readU8() << 8); }
-    uint32_t readU32() const {
+    uint8_t readU8() { return *_ptr++; }
+    uint16_t readU16() { return readU8() | static_cast<uint16_t>(readU8() << 8); }
+    uint32_t readU32() {
         uint32_t ret = readU8();
         ret |= static_cast<uint32_t>(readU8() <<  8);
         ret |= static_cast<uint32_t>(readU8() << 16);
         ret |= static_cast<uint32_t>(readU8() << 24);
         return ret;
     }
-    uint16_t readU16_BigEndian() const { return static_cast<uint16_t>(readU8() << 8) | readU8(); }
-    uint32_t readU32_BigEndian() const {
+    uint16_t readU16_BigEndian() { return static_cast<uint16_t>(readU8() << 8) | readU8(); }
+    uint32_t readU32_BigEndian() {
         uint32_t ret = static_cast<uint32_t>(readU8() << 24);
         ret |= static_cast<uint32_t>(readU8() << 16);
         ret |= static_cast<uint32_t>(readU8() <<  8);
         ret |= readU8();
         return ret;
     }
-    float readFloat() const {
+    float readFloat() {
         union { float f; uint32_t i; } u { .i = readU32() }; return u.f; // NOLINT(cppcoreguidelines-pro-type-union-access)
     }
 
-    uint8_t readU8_Checked() const { if (_ptr < _end) { return *_ptr++; } return 0; }
-    uint16_t readU16_Checked() const {
+    uint8_t readU8_Checked() { if (_ptr < _end) { return *_ptr++; } return 0; }
+    uint16_t readU16_Checked() {
         if (_ptr < _end - sizeof(uint16_t)) {
             return readU16();
         }
         return 0;
     }
-    uint32_t readU32_Checked() const {
+    uint32_t readU32_Checked() {
         if (_ptr < _end - sizeof(uint32_t)) {
             return readU32();
         }
         return 0;
     }
-    uint16_t readU16BigEndianChecked() const {
+    uint16_t readU16_BigEndianChecked() {
         if (_ptr < _end - sizeof(uint16_t)) {
             return readU16_BigEndian();
         }
         return 0;
     }
-    uint32_t readU32BigEndianChecked() const {
+    uint32_t readU32_BigEndianChecked() {
         if (_ptr < _end - sizeof(uint32_t)) {
             return readU32_BigEndian();
         }
         return 0;
     }
-    float readFloat_Checked() const {
+    float readFloat_Checked() {
         if (_ptr < _end - sizeof(float)) {
             union { float f; uint32_t i; } u { .i = readU32() }; return u.f; // NOLINT(cppcoreguidelines-pro-type-union-access)
         }
         return 0.0F;
     }
 
-    void readData(void *data, size_t len) const { if (_ptr + len < _end) { memcpy(data, _ptr, len); _ptr += len; } }
+    void readData(void *data, size_t len) { if (_ptr + len < _end) { memcpy(data, _ptr, len); _ptr += len; } }
 //
 // Write functions
 //
@@ -140,12 +140,12 @@ public:
             writeU32(value);
         }
     }
-    void writeU16BigEndianChecked(uint16_t value) {
+    void writeU16_BigEndianChecked(uint16_t value) {
         if (_ptr < _end - sizeof(uint16_t)) {
             writeU16(value);
         }
     }
-    void writeU32BigEndianChecked(uint32_t value) {
+    void writeU32_BigEndianChecked(uint32_t value) {
         if (_ptr < _end - sizeof(uint32_t)) {
             writeU32_BigEndian(value);
         }
@@ -167,7 +167,7 @@ public:
     void fillWithoutAdvancing(uint8_t data, size_t len) { if (_ptr + len < _end) { memset(_ptr, data, len); } }
 
 protected:
-    mutable uint8_t* _ptr; // data pointer must be first
-    uint8_t* _begin;
+    uint8_t* _ptr; // data pointer must be first
+    uint8_t* const _begin;
     uint8_t* _end; // points to byte after the end of the buffer, as is conventional
 };

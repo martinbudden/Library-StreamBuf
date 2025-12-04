@@ -49,7 +49,7 @@ void test_stream_buf()
     TEST_ASSERT_EQUAL(7, sbuf.bytesWritten());
     TEST_ASSERT_EQUAL(BUF_SIZE - 7, sbuf.bytesRemaining());
 
-    const StreamBufReader sbufReader(sbuf.reader());
+    StreamBufReader sbufReader(sbuf.reader());
     TEST_ASSERT_EQUAL(0, sbufReader.bytesRead());
     TEST_ASSERT_EQUAL(7, sbufReader.bytesRemaining());
 
@@ -106,7 +106,7 @@ void test_stream_buf_big_endian()
     sbuf.writeU32_BigEndian(3);
     TEST_ASSERT_EQUAL(BUF_SIZE - 7, sbuf.bytesRemaining());
 
-    const StreamBufReader sbufReader(sbuf.reader());
+    StreamBufReader sbufReader(sbuf.reader());
     TEST_ASSERT_EQUAL(0, sbufReader.bytesRead());
     TEST_ASSERT_EQUAL(7, sbufReader.bytesRemaining());
 
@@ -283,7 +283,7 @@ void test_stream_buf_float()
     TEST_ASSERT_EQUAL(11, sbuf.bytesWritten());
     TEST_ASSERT_EQUAL(BUF_SIZE - 11, sbuf.bytesRemaining());
 
-    const StreamBufReader sbufReader(sbuf.reader());
+    StreamBufReader sbufReader(sbuf.reader());
     TEST_ASSERT_EQUAL(0, sbufReader.bytesRead());
     TEST_ASSERT_EQUAL(11, sbufReader.bytesRemaining());
 
