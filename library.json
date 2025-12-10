@@ -1,7 +1,7 @@
 {
     "name": "StreamBuf",
     "description": "Simple serializer/deserializer with optional bounds checking",
-    "keywords": "StreamBuf deserializer",
+    "keywords": "StreamBuf serializer deserializer",
     "authors": {
         "name": "Martin Budden",
         "url": "https://github.com/martinbudden"
