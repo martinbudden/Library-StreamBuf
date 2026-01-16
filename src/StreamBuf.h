@@ -21,12 +21,12 @@ public:
     const uint8_t* begin() const { return _begin; }
     const uint8_t* end() const { return _end; }
 
-    /*! 
+    /*!
     when writing - return available space
     when reading - return the number of bytes remaining in the buffer
     */
     size_t bytesRemaining() const { return _end - _ptr - 1; }
-    /*! 
+    /*!
     when writing - return the number of bytes written to the buffer
     when reading - return the number of bytes read
     */
