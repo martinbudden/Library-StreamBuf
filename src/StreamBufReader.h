@@ -19,8 +19,8 @@ public:
     const uint8_t* end() const { return _end; }
 
     //! return the number of bytes remaining in the buffer
-    size_t bytesRemaining() const { return static_cast<size_t>(_end - _ptr - 1); }
-    size_t bytesRead() const { return static_cast<size_t>(_ptr - _begin); }
+    size_t bytesRemaining() const { return _end - _ptr - 1; }
+    size_t bytesRead() const { return _ptr - _begin; }
 
     //! Advance _ptr, this skips data
     void advance(size_t size) { if (_ptr + size < _end) { _ptr += size; } }
@@ -52,7 +52,10 @@ public:
         return ret;
     }
     float readFloat() {
-        union { float f; uint32_t i; } u { .i = readU32() }; return u.f; // NOLINT(cppcoreguidelines-pro-type-union-access)
+        const uint32_t value = readU32();
+        // NOLINTBEGIN(cppcoreguidelines-pro-type-reinterpret-cast)
+        return *reinterpret_cast<const float*>(&value); // cppcheck-suppress invalidPointerCast
+        // NOLINTEND(cppcoreguidelines-pro-type-reinterpret-cast)
     }
 
     uint8_t readU8_Checked() { if (_ptr < _end) { return *_ptr++; } return 0; }
@@ -82,7 +85,7 @@ public:
     }
     float readFloat_Checked() {
         if (_ptr < _end - sizeof(float)) {
-            union { float f; uint32_t i; } u { .i = readU32() }; return u.f; // NOLINT(cppcoreguidelines-pro-type-union-access)
+            return readFloat();
         }
         return 0.0F;
     }

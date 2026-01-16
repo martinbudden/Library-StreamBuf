@@ -25,12 +25,12 @@ public:
     when writing - return available space
     when reading - return the number of bytes remaining in the buffer
     */
-    size_t bytesRemaining() const { return static_cast<size_t>(_end - _ptr - 1); }
+    size_t bytesRemaining() const { return _end - _ptr - 1; }
     /*! 
     when writing - return the number of bytes written to the buffer
     when reading - return the number of bytes read
     */
-    size_t bytesWritten() const { return static_cast<size_t>(_ptr - _begin); }
+    size_t bytesWritten() const { return _ptr - _begin; }
 
     /*! Advance _ptr
     when reading - this skips data
@@ -65,7 +65,10 @@ public:
         return ret;
     }
     float readFloat() {
-        union { float f; uint32_t i; } u { .i = readU32() }; return u.f; // NOLINT(cppcoreguidelines-pro-type-union-access)
+        const uint32_t value = readU32();
+        // NOLINTBEGIN(cppcoreguidelines-pro-type-reinterpret-cast)
+        return *reinterpret_cast<const float*>(&value); // cppcheck-suppress invalidPointerCast
+        // NOLINTEND(cppcoreguidelines-pro-type-reinterpret-cast)
     }
 
     uint8_t readU8_Checked() { if (_ptr < _end) { return *_ptr++; } return 0; }
@@ -95,7 +98,7 @@ public:
     }
     float readFloat_Checked() {
         if (_ptr < _end - sizeof(float)) {
-            union { float f; uint32_t i; } u { .i = readU32() }; return u.f; // NOLINT(cppcoreguidelines-pro-type-union-access)
+            return readFloat();
         }
         return 0.0F;
     }
@@ -126,7 +129,10 @@ public:
         writeU8(static_cast<uint8_t>(value));
     }
     void writeFloat(float value) {
-        union { float f; uint32_t i; } u { .f = value }; writeU32(u.i); // NOLINT(cppcoreguidelines-pro-type-union-access)
+        // NOLINTBEGIN(cppcoreguidelines-pro-type-reinterpret-cast)
+        const uint32_t u = *reinterpret_cast<const uint32_t*>(&value); // cppcheck-suppress invalidPointerCast
+        // NOLINTEND(cppcoreguidelines-pro-type-reinterpret-cast)
+        writeU32(u);
     }
 
     void writeU8_Checked(uint8_t value) { if (_ptr < _end) { *_ptr++ = value; } }
@@ -152,7 +158,7 @@ public:
     }
     void writeFloatChecked(float value) {
         if (_ptr < _end - sizeof(float)) {
-            union { float f; uint32_t i; } u { .f = value }; writeU32(u.i); // NOLINT(cppcoreguidelines-pro-type-union-access)
+            writeFloat(value);
         }
     }
 
