@@ -25,12 +25,12 @@ public:
     when writing - return available space
     when reading - return the number of bytes remaining in the buffer
     */
-    size_t bytes_remaining() const { return _end - _ptr - 1; }
+    ptrdiff_t bytes_remaining() const { return _end - _ptr - 1; }
     /*!
     when writing - return the number of bytes written to the buffer
     when reading - return the number of bytes read
     */
-    size_t bytes_written() const { return _ptr - _begin; }
+    ptrdiff_t bytes_written() const { return _ptr - _begin; }
 
     /*! Advance _ptr
     when reading - this skips data
