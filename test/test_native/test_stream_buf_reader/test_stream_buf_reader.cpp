@@ -30,56 +30,56 @@ void test_stream_buf_reader_offset()
 void test_stream_buf_reader()
 {
     std::array<uint8_t, 256> buf;
-    StreamBuf sbuf(&buf[0], sizeof(buf));
+    StreamBufWriter sbuf(&buf[0], sizeof(buf));
 
-    TEST_ASSERT_EQUAL(sizeof(buf), sbuf.bytesRemaining());
+    TEST_ASSERT_EQUAL(sizeof(buf), sbuf.bytes_remaining());
 
-    sbuf.writeU8(1);
-    TEST_ASSERT_EQUAL(1, sbuf.bytesWritten());
-    TEST_ASSERT_EQUAL(sizeof(buf) - 1, sbuf.bytesRemaining());
+    sbuf.write_u8(1);
+    TEST_ASSERT_EQUAL(1, sbuf.bytes_written());
+    TEST_ASSERT_EQUAL(sizeof(buf) - 1, sbuf.bytes_remaining());
 
-    sbuf.writeU16(2);
-    TEST_ASSERT_EQUAL(3, sbuf.bytesWritten());
-    TEST_ASSERT_EQUAL(sizeof(buf) - 3, sbuf.bytesRemaining());
+    sbuf.write_u16(2);
+    TEST_ASSERT_EQUAL(3, sbuf.bytes_written());
+    TEST_ASSERT_EQUAL(sizeof(buf) - 3, sbuf.bytes_remaining());
 
-    sbuf.writeU32(3);
-    TEST_ASSERT_EQUAL(7, sbuf.bytesWritten());
-    TEST_ASSERT_EQUAL(sizeof(buf) - 7, sbuf.bytesRemaining());
+    sbuf.write_u32(3);
+    TEST_ASSERT_EQUAL(7, sbuf.bytes_written());
+    TEST_ASSERT_EQUAL(sizeof(buf) - 7, sbuf.bytes_remaining());
 
     StreamBufReader sbufReader(sbuf.reader());
 
-    TEST_ASSERT_EQUAL(0, sbufReader.bytesRead());
-    TEST_ASSERT_EQUAL(7, sbufReader.bytesRemaining());
+    TEST_ASSERT_EQUAL(0, sbufReader.bytes_read());
+    TEST_ASSERT_EQUAL(7, sbufReader.bytes_remaining());
 
-    const uint8_t v1 = sbufReader.readU8();
+    const uint8_t v1 = sbufReader.read_u8();
     TEST_ASSERT_EQUAL(1, v1);
-    TEST_ASSERT_EQUAL(1, sbufReader.bytesRead());
-    TEST_ASSERT_EQUAL(6, sbufReader.bytesRemaining());
+    TEST_ASSERT_EQUAL(1, sbufReader.bytes_read());
+    TEST_ASSERT_EQUAL(6, sbufReader.bytes_remaining());
 
-    const uint16_t v2 = sbufReader.readU16();
+    const uint16_t v2 = sbufReader.read_u16();
     TEST_ASSERT_EQUAL(2, v2);
-    TEST_ASSERT_EQUAL(3, sbufReader.bytesRead());
-    TEST_ASSERT_EQUAL(4, sbufReader.bytesRemaining());
+    TEST_ASSERT_EQUAL(3, sbufReader.bytes_read());
+    TEST_ASSERT_EQUAL(4, sbufReader.bytes_remaining());
 
-    const uint32_t v3 = sbufReader.readU32();
+    const uint32_t v3 = sbufReader.read_u32();
     TEST_ASSERT_EQUAL(3, v3);
-    TEST_ASSERT_EQUAL(7, sbufReader.bytesRead());
-    TEST_ASSERT_EQUAL(0, sbufReader.bytesRemaining());
+    TEST_ASSERT_EQUAL(7, sbufReader.bytes_read());
+    TEST_ASSERT_EQUAL(0, sbufReader.bytes_remaining());
 }
 
 void test_stream_buf_reader_strings()
 {
     std::array<uint8_t, 256> buf;
     buf.fill(0xFF);
-    StreamBuf sbuf(&buf[0], sizeof(buf));
+    StreamBufWriter sbuf(&buf[0], sizeof(buf));
 
-    TEST_ASSERT_EQUAL(sizeof(buf), sbuf.bytesRemaining());
-    sbuf.fillWithoutAdvancing(0xFF, sizeof(buf));
-    TEST_ASSERT_EQUAL(sizeof(buf), sbuf.bytesRemaining());
+    TEST_ASSERT_EQUAL(sizeof(buf), sbuf.bytes_remaining());
+    sbuf.fill_without_advancing(0xFF, sizeof(buf));
+    TEST_ASSERT_EQUAL(sizeof(buf), sbuf.bytes_remaining());
 
-    sbuf.writeString("Hello");
-    TEST_ASSERT_EQUAL(5, sbuf.bytesWritten());
-    TEST_ASSERT_EQUAL(sizeof(buf) - 5, sbuf.bytesRemaining());
+    sbuf.write_string("Hello");
+    TEST_ASSERT_EQUAL(5, sbuf.bytes_written());
+    TEST_ASSERT_EQUAL(sizeof(buf) - 5, sbuf.bytes_remaining());
     const uint8_t* ptr = sbuf.ptr();
     TEST_ASSERT_EQUAL(0xFF, *ptr);
     TEST_ASSERT_EQUAL('o', *(ptr-1));
@@ -97,7 +97,7 @@ void test_stream_buf_reader_strings()
     TEST_ASSERT_EQUAL('o', ptr[4]);
     TEST_ASSERT_EQUAL(0xFF, ptr[5]);
 
-    sbuf.switchToReader();
+    sbuf.switch_to_reader();
     ptr = sbuf.ptr();
     TEST_ASSERT_EQUAL('H', ptr[0]);
     TEST_ASSERT_EQUAL('e', ptr[1]);
