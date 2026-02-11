@@ -51,12 +51,12 @@ public:
         ret |= read_u8();
         return ret;
     }
-    float read_f32() {
+    /*float read_f32() {
         const uint32_t value = read_u32();
         // NOLINTBEGIN(cppcoreguidelines-pro-type-reinterpret-cast)
         return *reinterpret_cast<const float*>(&value); // cppcheck-suppress invalidPointerCast
         // NOLINTEND(cppcoreguidelines-pro-type-reinterpret-cast)
-    }
+    }*/
 
     uint8_t read_u8_checked() { if (_ptr < _end) { return *_ptr++; } return 0; }
     uint16_t read_u16_checked() {
@@ -83,12 +83,12 @@ public:
         }
         return 0;
     }
-    float read_f32_checked() {
+    /*float read_f32_checked() {
         if (_ptr < _end - sizeof(float)) {
             return read_f32();
         }
         return 0.0F;
-    }
+    }*/
 
     void read_data(void *data, size_t len) { if (_ptr + len < _end) { memcpy(data, _ptr, len); _ptr += len; } }
 protected:
