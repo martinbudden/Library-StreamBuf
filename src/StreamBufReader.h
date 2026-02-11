@@ -19,8 +19,8 @@ public:
     const uint8_t* end() const { return _end; }
 
     //! return the number of bytes remaining in the buffer
-    ptrdiff_t bytes_remaining() const { return _end - _ptr - 1; }
-    ptrdiff_t bytes_read() const { return _ptr - _begin; }
+    size_t bytes_remaining() const { return static_cast<size_t>(_end - _ptr - 1); } // guaranteed to be >= 0
+    size_t bytes_read() const { return static_cast<size_t>(_ptr - _begin); } // guaranteed to be >= 0
 
     //! Advance _ptr, this skips data
     void advance(size_t size) { if (_ptr + size < _end) { _ptr += size; } }
