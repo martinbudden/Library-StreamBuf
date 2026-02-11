@@ -128,12 +128,12 @@ public:
         write_u8(static_cast<uint8_t>(value >> 8));
         write_u8(static_cast<uint8_t>(value));
     }
-    void write_f32(float value) {
+    /*void write_f32(float value) {
         // NOLINTBEGIN(cppcoreguidelines-pro-type-reinterpret-cast)
         const uint32_t u = *reinterpret_cast<const uint32_t*>(&value); // cppcheck-suppress invalidPointerCast
         // NOLINTEND(cppcoreguidelines-pro-type-reinterpret-cast)
         write_u32(u);
-    }
+    }*/
 
     void write_u8_checked(uint8_t value) { if (_ptr < _end) { *_ptr++ = value; } }
     void write_u16_checked(uint16_t value) {
@@ -156,11 +156,11 @@ public:
             write_u32_big_endian(value);
         }
     }
-    void write_f32Checked(float value) {
+    /*void write_f32Checked(float value) {
         if (_ptr < _end - sizeof(float)) {
             write_f32(value);
         }
-    }
+    }*/
 
     // all bulk write operations are bounds checked
     void write_data(const void* data, size_t len) { if (_ptr + len < _end) { memcpy(_ptr, data, len); _ptr += len; } }
