@@ -1,6 +1,6 @@
 #pragma once
 
-#include "StreamBufWriter.h"
+#include "stream_buf_writer.h"
 
 /*!
 Simple read only deserializer with optional bounds checking

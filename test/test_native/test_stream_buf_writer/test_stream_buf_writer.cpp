@@ -1,5 +1,5 @@
-#include "StreamBufWriter.h"
-#include "StreamBufReader.h"
+#include "stream_buf_writer.h"
+#include "stream_buf_reader.h"
 #include <array>
 #include <unity.h>
 
